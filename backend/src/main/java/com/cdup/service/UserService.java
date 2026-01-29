@@ -18,12 +18,14 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuditService auditService;
+    private final EmailService emailService;
 
     public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder,
-                       AuditService auditService) {
+                       AuditService auditService, EmailService emailService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.auditService = auditService;
+        this.emailService = emailService;
     }
 
     @Transactional
@@ -81,11 +83,26 @@ public class UserService {
     public void toggleUserStatus(Long id, String adminUsername) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-        user.setActive(!user.isActive());
+
+        boolean wasActive = user.isActive();
+        user.setActive(!wasActive);
         userRepository.save(user);
 
         auditService.log("TOGGLE_USER_STATUS", "User", id, adminUsername,
                 "ADMIN", null, "User " + user.getUsername() + " status set to " + user.isActive());
+
+        // Send email notification
+        if (!wasActive && user.isActive()) {
+            // Access granted - send notification email
+            emailService.sendAccessGrantedEmail(user.getEmail(), user.getFullName(), user.getUsername());
+            auditService.log("ACCESS_GRANTED_EMAIL", "User", id, adminUsername,
+                    "ADMIN", null, "Access granted email sent to: " + user.getEmail());
+        } else if (wasActive && !user.isActive()) {
+            // Access revoked - send notification email
+            emailService.sendAccessRevokedEmail(user.getEmail(), user.getFullName());
+            auditService.log("ACCESS_REVOKED_EMAIL", "User", id, adminUsername,
+                    "ADMIN", null, "Access revoked email sent to: " + user.getEmail());
+        }
     }
 
     @Transactional
@@ -102,6 +119,14 @@ public class UserService {
 
     public List<UserDTO> getAllUsers() {
         return userRepository.findAll().stream().map(this::mapToDTO).collect(Collectors.toList());
+    }
+
+    public List<UserDTO> getPendingUsers() {
+        return userRepository.findByIsActive(false).stream().map(this::mapToDTO).collect(Collectors.toList());
+    }
+
+    public List<UserDTO> getActiveUsers() {
+        return userRepository.findByIsActive(true).stream().map(this::mapToDTO).collect(Collectors.toList());
     }
 
     public UserDTO getUserById(Long id) {
