@@ -1,4 +1,4 @@
-package com.cdup.model.enums;
+package com.cdup.enums;
 
 public enum BulkUploadStatus {
     UPLOADED("Uploaded"),

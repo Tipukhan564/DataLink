@@ -1,6 +1,6 @@
-package com.cdup.model.entity;
+package com.cdup.entity;
 
-import com.cdup.model.enums.UserRole;
+import com.cdup.enums.UserRole;
 import jakarta.persistence.*;
 
 @Entity

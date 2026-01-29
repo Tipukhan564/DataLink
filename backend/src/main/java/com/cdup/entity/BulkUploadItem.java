@@ -1,6 +1,6 @@
-package com.cdup.model.entity;
+package com.cdup.entity;
 
-import com.cdup.model.enums.RequestStatus;
+import com.cdup.enums.RequestStatus;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 

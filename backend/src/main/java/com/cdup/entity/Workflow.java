@@ -1,4 +1,4 @@
-package com.cdup.model.entity;
+package com.cdup.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;

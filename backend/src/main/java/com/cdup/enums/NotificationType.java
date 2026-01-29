@@ -1,4 +1,4 @@
-package com.cdup.model.enums;
+package com.cdup.enums;
 
 public enum NotificationType {
     REQUEST_SUBMITTED("Request Submitted", "info"),
