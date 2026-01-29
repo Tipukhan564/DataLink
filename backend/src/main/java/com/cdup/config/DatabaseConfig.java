@@ -2,22 +2,30 @@ package com.cdup.config;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import org.springframework.context.annotation.Profile;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
 
+/**
+ * Database Configuration for CDUP application.
+ * Configured for MySQL database with HikariCP connection pooling.
+ * Supports both MySQL (production) and H2 (development) databases.
+ */
 @Configuration
 @EnableJpaAuditing
 @EnableJpaRepositories(basePackages = "com.cdup.repository")
 @EnableTransactionManagement
 public class DatabaseConfig {
+
+    private static final Logger log = LoggerFactory.getLogger(DatabaseConfig.class);
 
     @Value("${spring.datasource.url}")
     private String dbUrl;
@@ -31,21 +39,26 @@ public class DatabaseConfig {
     @Value("${spring.datasource.driver-class-name}")
     private String driverClassName;
 
-    @Value("${app.datasource.pool-size:10}")
+    @Value("${spring.datasource.hikari.maximum-pool-size:10}")
     private int poolSize;
 
-    @Value("${app.datasource.connection-timeout:30000}")
+    @Value("${spring.datasource.hikari.connection-timeout:30000}")
     private long connectionTimeout;
 
-    @Value("${app.datasource.idle-timeout:600000}")
+    @Value("${spring.datasource.hikari.idle-timeout:600000}")
     private long idleTimeout;
 
-    @Value("${app.datasource.max-lifetime:1800000}")
+    @Value("${spring.datasource.hikari.max-lifetime:1800000}")
     private long maxLifetime;
+
+    @Value("${spring.datasource.hikari.minimum-idle:5}")
+    private int minimumIdle;
 
     @Bean
     @Primary
     public DataSource dataSource() {
+        log.info("Initializing DataSource with URL: {}", dbUrl);
+
         HikariConfig config = new HikariConfig();
         config.setJdbcUrl(dbUrl);
         config.setUsername(dbUsername);
@@ -54,18 +67,31 @@ public class DatabaseConfig {
 
         // Pool settings
         config.setMaximumPoolSize(poolSize);
-        config.setMinimumIdle(poolSize / 2);
+        config.setMinimumIdle(minimumIdle);
         config.setConnectionTimeout(connectionTimeout);
         config.setIdleTimeout(idleTimeout);
         config.setMaxLifetime(maxLifetime);
-
-        // Performance settings
         config.setPoolName("CDUP-HikariPool");
-        config.addDataSourceProperty("cachePrepStmts", "true");
-        config.addDataSourceProperty("prepStmtCacheSize", "250");
-        config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
-        config.addDataSourceProperty("useServerPrepStmts", "true");
 
+        // MySQL-specific performance settings
+        if (driverClassName.contains("mysql")) {
+            log.info("Configuring MySQL-specific settings");
+            config.addDataSourceProperty("cachePrepStmts", "true");
+            config.addDataSourceProperty("prepStmtCacheSize", "250");
+            config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
+            config.addDataSourceProperty("useServerPrepStmts", "true");
+            config.addDataSourceProperty("useLocalSessionState", "true");
+            config.addDataSourceProperty("rewriteBatchedStatements", "true");
+            config.addDataSourceProperty("cacheResultSetMetadata", "true");
+            config.addDataSourceProperty("cacheServerConfiguration", "true");
+            config.addDataSourceProperty("elideSetAutoCommits", "true");
+            config.addDataSourceProperty("maintainTimeStats", "false");
+        }
+
+        // Connection test query
+        config.setConnectionTestQuery("SELECT 1");
+
+        log.info("DataSource initialized successfully with pool size: {}", poolSize);
         return new HikariDataSource(config);
     }
 }
