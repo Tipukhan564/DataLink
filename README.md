@@ -45,7 +45,7 @@ A comprehensive, role-based web application for automating customer data updates
 - **Java 17** + **Spring Boot 3.2.1**
 - **Spring Security** + **JWT Authentication**
 - **Spring Data JPA** + **Hibernate**
-- **H2 Database** (dev) / **Oracle** (prod)
+- **MySQL 8.0+** (MySQL Workbench)
 - **Flyway** for database migrations
 - **Swagger/OpenAPI** for API documentation
 

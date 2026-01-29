@@ -1,45 +1,38 @@
 -- V3__add_workflow_tables.sql
--- Workflow management tables
+-- Workflow management tables for MySQL
 
-CREATE TABLE workflows (
+-- Workflows table for defining approval workflows
+CREATE TABLE IF NOT EXISTS workflows (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(50) NOT NULL UNIQUE,
-    description VARCHAR(255),
+    name VARCHAR(100) NOT NULL UNIQUE,
+    description TEXT,
     is_active BOOLEAN DEFAULT TRUE,
     requires_approval BOOLEAN DEFAULT TRUE,
     auto_process BOOLEAN DEFAULT FALSE,
     approval_threshold INT DEFAULT 1,
-    escalation_hours INT DEFAULT 24,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    created_by BIGINT,
-    FOREIGN KEY (created_by) REFERENCES users(id)
-);
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_workflows_name (name),
+    INDEX idx_workflows_active (is_active)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE workflow_steps (
+-- Workflow Steps table for defining workflow steps
+CREATE TABLE IF NOT EXISTS workflow_steps (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     workflow_id BIGINT NOT NULL,
     step_order INT NOT NULL,
-    name VARCHAR(50) NOT NULL,
-    description VARCHAR(255),
+    name VARCHAR(100) NOT NULL,
+    description TEXT,
     required_role VARCHAR(20),
     is_mandatory BOOLEAN DEFAULT TRUE,
     timeout_hours INT DEFAULT 24,
-    can_skip BOOLEAN DEFAULT FALSE,
-    notify_on_pending BOOLEAN DEFAULT TRUE,
-    notify_on_complete BOOLEAN DEFAULT TRUE,
-    FOREIGN KEY (workflow_id) REFERENCES workflows(id) ON DELETE CASCADE
-);
-
-CREATE INDEX idx_workflow_active ON workflows(is_active);
-CREATE INDEX idx_workflow_steps_order ON workflow_steps(workflow_id, step_order);
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (workflow_id) REFERENCES workflows(id) ON DELETE CASCADE,
+    INDEX idx_workflow_steps_workflow (workflow_id),
+    INDEX idx_workflow_steps_order (step_order)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Insert default workflow
-INSERT INTO workflows (name, description, requires_approval, escalation_hours)
-VALUES ('default', 'Default customer update workflow', TRUE, 24);
-
-INSERT INTO workflow_steps (workflow_id, step_order, name, required_role, is_mandatory)
-VALUES
-    ((SELECT id FROM workflows WHERE name = 'default'), 1, 'Submission', 'AGENT', TRUE),
-    ((SELECT id FROM workflows WHERE name = 'default'), 2, 'Approval', 'SUPERVISOR', TRUE),
-    ((SELECT id FROM workflows WHERE name = 'default'), 3, 'Processing', 'ENGINEER', TRUE);
+INSERT INTO workflows (name, description, requires_approval, auto_process, approval_threshold)
+VALUES ('Standard Customer Update', 'Standard workflow for customer data updates requiring supervisor approval', TRUE, FALSE, 1);

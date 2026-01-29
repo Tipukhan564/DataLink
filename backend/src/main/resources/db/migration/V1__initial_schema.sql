@@ -1,8 +1,9 @@
 -- V1__initial_schema.sql
--- Initial database schema for CDUP
+-- Initial MySQL database schema for CDUP (Customer Data Update Portal)
+-- Migrated from Oracle to MySQL
 
--- Users table
-CREATE TABLE users (
+-- Users table for login and authentication
+CREATE TABLE IF NOT EXISTS users (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
@@ -12,19 +13,23 @@ CREATE TABLE users (
     department VARCHAR(100),
     role VARCHAR(20) NOT NULL DEFAULT 'AGENT',
     status VARCHAR(20) NOT NULL DEFAULT 'ACTIVE',
-    active BOOLEAN DEFAULT TRUE,
-    locked BOOLEAN DEFAULT FALSE,
-    failed_login_attempts INT DEFAULT 0,
-    last_login TIMESTAMP,
-    password_changed_at TIMESTAMP,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    is_active BOOLEAN DEFAULT TRUE,
+    account_locked BOOLEAN DEFAULT FALSE,
+    failed_attempts INT DEFAULT 0,
+    last_login DATETIME,
+    password_changed_at DATETIME,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     created_by BIGINT,
-    updated_by BIGINT
-);
+    updated_by BIGINT,
+    INDEX idx_users_username (username),
+    INDEX idx_users_email (email),
+    INDEX idx_users_role (role),
+    INDEX idx_users_active (is_active)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Customer Update Requests table
-CREATE TABLE customer_update_requests (
+-- Customer Update Requests table (main business entity)
+CREATE TABLE IF NOT EXISTS customer_update_requests (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     complaint_number VARCHAR(50),
     cnic VARCHAR(15) NOT NULL,
@@ -46,23 +51,21 @@ CREATE TABLE customer_update_requests (
     approval_comments TEXT,
     rejection_reason TEXT,
     processing_result TEXT,
-    submitted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    approved_at TIMESTAMP,
-    processed_at TIMESTAMP,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (submitted_by) REFERENCES users(id),
-    FOREIGN KEY (approved_by) REFERENCES users(id),
-    FOREIGN KEY (processed_by) REFERENCES users(id)
-);
-
--- Create indexes
-CREATE INDEX idx_requests_cnic ON customer_update_requests(cnic);
-CREATE INDEX idx_requests_mobile ON customer_update_requests(mobile_number);
-CREATE INDEX idx_requests_status ON customer_update_requests(status);
-CREATE INDEX idx_requests_submitted_by ON customer_update_requests(submitted_by);
-CREATE INDEX idx_requests_created_at ON customer_update_requests(created_at);
-
--- Create indexes for users
-CREATE INDEX idx_users_role ON users(role);
-CREATE INDEX idx_users_active ON users(active);
+    db_execution_result TEXT,
+    error_message VARCHAR(1000),
+    batch_id BIGINT,
+    submitted_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    approved_at DATETIME,
+    processed_at DATETIME,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (submitted_by) REFERENCES users(id) ON DELETE RESTRICT,
+    FOREIGN KEY (approved_by) REFERENCES users(id) ON DELETE SET NULL,
+    FOREIGN KEY (processed_by) REFERENCES users(id) ON DELETE SET NULL,
+    INDEX idx_requests_cnic (cnic),
+    INDEX idx_requests_mobile (mobile_number),
+    INDEX idx_requests_status (status),
+    INDEX idx_requests_submitted_by (submitted_by),
+    INDEX idx_requests_created_at (created_at),
+    INDEX idx_requests_batch_id (batch_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

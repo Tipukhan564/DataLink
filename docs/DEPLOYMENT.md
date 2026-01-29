@@ -5,12 +5,20 @@
 - **Java 17+** (for backend)
 - **Node.js 18+** (for frontend)
 - **Maven 3.8+** (for building backend)
-- **Oracle Database** or **H2** (for development)
+- **MySQL 8.0+** (MySQL Workbench)
 - **Redis** (optional, for caching)
 
 ---
 
 ## Development Setup
+
+### Database Setup (MySQL Workbench)
+
+1. **Open MySQL Workbench** and connect to your local MySQL server
+2. **Create the database:**
+   ```sql
+   CREATE DATABASE cdup_db;
+   ```
 
 ### Backend
 
@@ -19,14 +27,13 @@
    cd backend
    ```
 
-2. **Configure database:**
-   Edit `src/main/resources/application.yml`:
+2. **Database is pre-configured in `application.yml`:**
    ```yaml
    spring:
      datasource:
-       url: jdbc:h2:mem:cdupdb
-       username: sa
-       password:
+       url: jdbc:mysql://localhost:3306/cdup_db
+       username: root
+       password: JSBL@admin123
    ```
 
 3. **Run the application:**
@@ -54,7 +61,7 @@
    npm run dev
    ```
 
-4. **Access UI:** http://localhost:3000
+4. **Access UI:** http://localhost:5173
 
 ---
 
@@ -68,13 +75,12 @@
    ./mvnw clean package -DskipTests
    ```
 
-2. **Run with production profile:**
+2. **Run with production settings:**
    ```bash
-   java -jar target/cdup-backend-1.0.0.jar \
-     --spring.profiles.active=prod \
-     --spring.datasource.url=jdbc:oracle:thin:@//host:1521/ORCL \
-     --spring.datasource.username=cdup_user \
-     --spring.datasource.password=secure_password
+   java -jar target/customer-data-portal-1.0.0-SNAPSHOT.jar \
+     --spring.datasource.url=jdbc:mysql://your-mysql-host:3306/cdup_db \
+     --spring.datasource.username=root \
+     --spring.datasource.password=your_password
    ```
 
 ### Frontend (Static Build)
@@ -111,12 +117,11 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - SPRING_PROFILES_ACTIVE=prod
-      - DB_URL=jdbc:oracle:thin:@//oracle:1521/ORCL
-      - DB_USERNAME=cdup_user
-      - DB_PASSWORD=secure_password
+      - DB_URL=jdbc:mysql://mysql:3306/cdup_db?useSSL=false&allowPublicKeyRetrieval=true
+      - DB_USERNAME=root
+      - DB_PASSWORD=JSBL@admin123
     depends_on:
-      - oracle
+      - mysql
 
   frontend:
     image: cdup-frontend:latest
@@ -125,10 +130,18 @@ services:
     depends_on:
       - backend
 
-  oracle:
-    image: container-registry.oracle.com/database/express:21.3.0-xe
+  mysql:
+    image: mysql:8.0
     ports:
-      - "1521:1521"
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=JSBL@admin123
+      - MYSQL_DATABASE=cdup_db
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:
 ```
 
 ---
@@ -137,10 +150,9 @@ services:
 
 | Variable | Description | Default |
 |----------|-------------|---------|
-| `SPRING_PROFILES_ACTIVE` | Active Spring profile | `dev` |
-| `DB_URL` | Database JDBC URL | H2 in-memory |
-| `DB_USERNAME` | Database username | `sa` |
-| `DB_PASSWORD` | Database password | (empty) |
+| `DB_URL` | MySQL JDBC URL | `jdbc:mysql://localhost:3306/cdup_db` |
+| `DB_USERNAME` | Database username | `root` |
+| `DB_PASSWORD` | Database password | `JSBL@admin123` |
 | `JWT_SECRET` | JWT signing secret | (generated) |
 | `JWT_EXPIRATION` | Token expiration (ms) | `86400000` |
 | `MAIL_HOST` | SMTP host | `smtp.gmail.com` |
@@ -168,15 +180,14 @@ Import the pre-configured dashboard from `docs/grafana-dashboard.json`.
 
 ## Backup & Recovery
 
-### Database Backup
+### Database Backup (MySQL)
 
 ```bash
-# Oracle
-expdp cdup_user/password@ORCL directory=DATA_PUMP_DIR dumpfile=cdup_backup.dmp
+mysqldump -u root -p cdup_db > cdup_backup.sql
 ```
 
 ### Restore
 
 ```bash
-impdp cdup_user/password@ORCL directory=DATA_PUMP_DIR dumpfile=cdup_backup.dmp
+mysql -u root -p cdup_db < cdup_backup.sql
 ```

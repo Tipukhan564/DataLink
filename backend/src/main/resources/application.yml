@@ -4,17 +4,14 @@ server:
     context-path: /api
 
 spring:
-  profiles:
-    active: ${SPRING_PROFILES_ACTIVE:mysql}
-
   application:
     name: cdup-backend
 
-  # MySQL Database Configuration (Primary - for login and all operations)
+  # MySQL Workbench Database Configuration
   datasource:
-    url: ${DB_URL:jdbc:mysql://localhost:3306/cdup_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true}
-    username: ${DB_USERNAME:root}
-    password: ${DB_PASSWORD:root}
+    url: jdbc:mysql://localhost:3306/cdup_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true
+    username: root
+    password: JSBL@admin123
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       connection-timeout: 30000
@@ -37,13 +34,9 @@ spring:
   flyway:
     enabled: true
     baseline-on-migrate: true
-    locations: classpath:db/migration/mysql
+    locations: classpath:db/migration
     validate-on-migrate: true
     clean-disabled: true
-
-  h2:
-    console:
-      enabled: false
 
   servlet:
     multipart:
