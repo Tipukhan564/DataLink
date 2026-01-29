@@ -13,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -33,17 +32,15 @@ public class CustomerUpdateService {
     private final CustomerUpdateRequestRepository requestRepository;
     private final UserRepository userRepository;
     private final AuditService auditService;
-    private final JdbcTemplate jdbcTemplate;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     public CustomerUpdateService(CustomerUpdateRequestRepository requestRepository,
                                   UserRepository userRepository, AuditService auditService,
-                                  JdbcTemplate jdbcTemplate) {
+                                  NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         this.requestRepository = requestRepository;
         this.userRepository = userRepository;
         this.auditService = auditService;
-        this.jdbcTemplate = jdbcTemplate;
-        this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(jdbcTemplate);
+        this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     }
 
     @Transactional

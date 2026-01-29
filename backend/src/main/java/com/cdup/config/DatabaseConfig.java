@@ -17,7 +17,6 @@ import javax.sql.DataSource;
 /**
  * Database Configuration for CDUP application.
  * Configured for MySQL database with HikariCP connection pooling.
- * Supports both MySQL (production) and H2 (development) databases.
  */
 @Configuration
 @EnableJpaAuditing

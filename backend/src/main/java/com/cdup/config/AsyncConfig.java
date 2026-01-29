@@ -67,6 +67,7 @@ public class AsyncConfig implements AsyncConfigurer {
 
     private static class CustomAsyncExceptionHandler implements AsyncUncaughtExceptionHandler {
         @Override
+        @SuppressWarnings("null")
         public void handleUncaughtException(Throwable ex, Method method, Object... params) {
             logger.error("Async execution error in method: {} with params: {}",
                     method.getName(), params, ex);

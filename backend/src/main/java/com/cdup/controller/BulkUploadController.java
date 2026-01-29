@@ -5,7 +5,6 @@ import com.cdup.entity.BulkUpload;
 import com.cdup.service.BulkUploadService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -30,7 +29,8 @@ public class BulkUploadController {
     public ResponseEntity<BulkUpload> uploadFile(
             @RequestParam("file") MultipartFile file,
             Authentication authentication) throws Exception {
-        if (!file.getOriginalFilename().endsWith(".xlsx") && !file.getOriginalFilename().endsWith(".xls")) {
+        String originalFilename = file.getOriginalFilename();
+        if (originalFilename == null || (!originalFilename.endsWith(".xlsx") && !originalFilename.endsWith(".xls"))) {
             throw new RuntimeException("Only Excel files (.xlsx, .xls) are accepted");
         }
         return ResponseEntity.ok(bulkUploadService.uploadFile(file, authentication.getName()));
