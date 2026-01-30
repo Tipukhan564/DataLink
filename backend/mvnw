@@ -1,0 +1,24 @@
+#!/bin/sh
+# Maven Wrapper script for Unix-based systems
+# This script downloads Maven if necessary and runs the specified goals
+
+set -e
+
+# Find the base directory
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+WRAPPER_JAR="$SCRIPT_DIR/.mvn/wrapper/maven-wrapper.jar"
+WRAPPER_PROPERTIES="$SCRIPT_DIR/.mvn/wrapper/maven-wrapper.properties"
+
+# Check if maven wrapper jar exists, if not use system maven
+if [ -f "$WRAPPER_JAR" ]; then
+    java -jar "$WRAPPER_JAR" "$@"
+else
+    # Fallback to system Maven
+    if command -v mvn > /dev/null 2>&1; then
+        exec mvn "$@"
+    else
+        echo "Maven is not installed and wrapper jar not found."
+        echo "Please install Maven or run: mvn -N io.takari:maven:wrapper"
+        exit 1
+    fi
+fi
