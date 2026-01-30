@@ -36,7 +36,11 @@ public class CustomerUpdateRequestDTO {
     private String createdAt;
     private String processedAt;
     private String errorMessage;
+<<<<<<< HEAD
     private String batchId;
+=======
+    private Long batchId;
+>>>>>>> f2da93b09fa8fe3e6357df2319d518e4d3e61f56
 
     public CustomerUpdateRequestDTO() {}
 
@@ -83,6 +87,11 @@ public class CustomerUpdateRequestDTO {
     public void setProcessedAt(String processedAt) { this.processedAt = processedAt; }
     public String getErrorMessage() { return errorMessage; }
     public void setErrorMessage(String errorMessage) { this.errorMessage = errorMessage; }
+<<<<<<< HEAD
     public String getBatchId() { return batchId; }
     public void setBatchId(String batchId) { this.batchId = batchId; }
+=======
+    public Long getBatchId() { return batchId; }
+    public void setBatchId(Long batchId) { this.batchId = batchId; }
+>>>>>>> f2da93b09fa8fe3e6357df2319d518e4d3e61f56
 }

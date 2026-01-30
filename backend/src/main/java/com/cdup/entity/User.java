@@ -11,7 +11,10 @@ public class User extends BaseEntity {
     private String username;
 
     @Column(nullable = false)
+<<<<<<< HEAD
     @com.fasterxml.jackson.annotation.JsonIgnore
+=======
+>>>>>>> f2da93b09fa8fe3e6357df2319d518e4d3e61f56
     private String password;
 
     @Column(name = "full_name", nullable = false, length = 100)

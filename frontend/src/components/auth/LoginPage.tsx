@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
+<<<<<<< HEAD
 import { useNavigate, Link } from 'react-router-dom';
+=======
+import { useNavigate } from 'react-router-dom';
+>>>>>>> f2da93b09fa8fe3e6357df2319d518e4d3e61f56
 import { useAuth } from '../../context/AuthContext';
 import { Database, Eye, EyeOff, Lock, User, AlertCircle } from 'lucide-react';
 import toast from 'react-hot-toast';
@@ -162,6 +166,7 @@ const LoginPage: React.FC = () => {
             </button>
           </form>
 
+<<<<<<< HEAD
           <div className="text-center mt-6">
             <p className="text-sm text-gray-600">
               Don't have an account?{' '}
@@ -171,6 +176,8 @@ const LoginPage: React.FC = () => {
             </p>
           </div>
 
+=======
+>>>>>>> f2da93b09fa8fe3e6357df2319d518e4d3e61f56
           <div className="mt-8 p-4 bg-blue-50 border border-blue-200 rounded-lg">
             <p className="text-xs font-medium text-blue-800 mb-2">Demo Credentials:</p>
             <div className="space-y-1 text-xs text-blue-700">

@@ -19,7 +19,11 @@ public interface CustomerUpdateRequestRepository extends JpaRepository<CustomerU
 
     Page<CustomerUpdateRequest> findBySubmittedById(Long userId, Pageable pageable);
 
+<<<<<<< HEAD
     List<CustomerUpdateRequest> findByBatchId(String batchId);
+=======
+    List<CustomerUpdateRequest> findByBatchId(Long batchId);
+>>>>>>> f2da93b09fa8fe3e6357df2319d518e4d3e61f56
 
     Page<CustomerUpdateRequest> findByCnicContaining(String cnic, Pageable pageable);
 
@@ -55,4 +59,8 @@ public interface CustomerUpdateRequestRepository extends JpaRepository<CustomerU
             @Param("startDate") LocalDateTime startDate,
             @Param("endDate") LocalDateTime endDate,
             Pageable pageable);
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> f2da93b09fa8fe3e6357df2319d518e4d3e61f56

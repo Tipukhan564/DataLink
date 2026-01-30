@@ -15,6 +15,11 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+<<<<<<< HEAD
+=======
+import org.springframework.lang.NonNull;
+
+>>>>>>> f2da93b09fa8fe3e6357df2319d518e4d3e61f56
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
@@ -28,9 +33,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     @Override
+<<<<<<< HEAD
     protected void doFilterInternal(HttpServletRequest request,
                                      HttpServletResponse response,
                                      FilterChain filterChain) throws ServletException, IOException {
+=======
+    protected void doFilterInternal(@NonNull HttpServletRequest request,
+                                     @NonNull HttpServletResponse response,
+                                     @NonNull FilterChain filterChain) throws ServletException, IOException {
+>>>>>>> f2da93b09fa8fe3e6357df2319d518e4d3e61f56
         String token = getTokenFromRequest(request);
 
         if (StringUtils.hasText(token) && tokenProvider.validateToken(token)) {

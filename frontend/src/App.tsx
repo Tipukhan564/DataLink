@@ -8,7 +8,10 @@ import AppLayout from './components/layout/AppLayout';
 
 // Pages
 import LoginPage from './components/auth/LoginPage';
+<<<<<<< HEAD
 import SignupPage from './components/auth/SignupPage';
+=======
+>>>>>>> f2da93b09fa8fe3e6357df2319d518e4d3e61f56
 import DashboardPage from './components/dashboard/DashboardPage';
 import CustomerUpdatePage from './components/customer-update/CustomerUpdatePage';
 import BulkUploadPage from './components/bulk-upload/BulkUploadPage';
@@ -34,11 +37,18 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
+<<<<<<< HEAD
         <BrowserRouter future={{ v7_relativeSplatPath: true }}>
           <Routes>
             {/* Public Routes */}
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
+=======
+        <BrowserRouter>
+          <Routes>
+            {/* Public Routes */}
+            <Route path="/login" element={<LoginPage />} />
+>>>>>>> f2da93b09fa8fe3e6357df2319d518e4d3e61f56
 
             {/* Protected Routes with Layout */}
             <Route path="/" element={<AppLayout />}>
@@ -90,4 +100,8 @@ function App() {
   );
 }
 
+<<<<<<< HEAD
 export default App;
+=======
+export default App;
+>>>>>>> f2da93b09fa8fe3e6357df2319d518e4d3e61f56

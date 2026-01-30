@@ -18,12 +18,23 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuditService auditService;
+<<<<<<< HEAD
 
     public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder,
                        AuditService auditService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.auditService = auditService;
+=======
+    private final EmailService emailService;
+
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder,
+                       AuditService auditService, EmailService emailService) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.auditService = auditService;
+        this.emailService = emailService;
+>>>>>>> f2da93b09fa8fe3e6357df2319d518e4d3e61f56
     }
 
     @Transactional
@@ -81,11 +92,33 @@ public class UserService {
     public void toggleUserStatus(Long id, String adminUsername) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
+<<<<<<< HEAD
         user.setActive(!user.isActive());
+=======
+
+        boolean wasActive = user.isActive();
+        user.setActive(!wasActive);
+>>>>>>> f2da93b09fa8fe3e6357df2319d518e4d3e61f56
         userRepository.save(user);
 
         auditService.log("TOGGLE_USER_STATUS", "User", id, adminUsername,
                 "ADMIN", null, "User " + user.getUsername() + " status set to " + user.isActive());
+<<<<<<< HEAD
+=======
+
+        // Send email notification
+        if (!wasActive && user.isActive()) {
+            // Access granted - send notification email
+            emailService.sendAccessGrantedEmail(user.getEmail(), user.getFullName(), user.getUsername());
+            auditService.log("ACCESS_GRANTED_EMAIL", "User", id, adminUsername,
+                    "ADMIN", null, "Access granted email sent to: " + user.getEmail());
+        } else if (wasActive && !user.isActive()) {
+            // Access revoked - send notification email
+            emailService.sendAccessRevokedEmail(user.getEmail(), user.getFullName());
+            auditService.log("ACCESS_REVOKED_EMAIL", "User", id, adminUsername,
+                    "ADMIN", null, "Access revoked email sent to: " + user.getEmail());
+        }
+>>>>>>> f2da93b09fa8fe3e6357df2319d518e4d3e61f56
     }
 
     @Transactional
@@ -104,6 +137,17 @@ public class UserService {
         return userRepository.findAll().stream().map(this::mapToDTO).collect(Collectors.toList());
     }
 
+<<<<<<< HEAD
+=======
+    public List<UserDTO> getPendingUsers() {
+        return userRepository.findByIsActive(false).stream().map(this::mapToDTO).collect(Collectors.toList());
+    }
+
+    public List<UserDTO> getActiveUsers() {
+        return userRepository.findByIsActive(true).stream().map(this::mapToDTO).collect(Collectors.toList());
+    }
+
+>>>>>>> f2da93b09fa8fe3e6357df2319d518e4d3e61f56
     public UserDTO getUserById(Long id) {
         return userRepository.findById(id).map(this::mapToDTO)
                 .orElseThrow(() -> new RuntimeException("User not found"));

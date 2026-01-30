@@ -98,7 +98,11 @@ public class BulkUploadService {
 
             for (CustomerUpdateRequestDTO dto : records) {
                 try {
+<<<<<<< HEAD
                     dto.setBatchId(String.valueOf(uploadId));
+=======
+                    dto.setBatchId(uploadId);
+>>>>>>> f2da93b09fa8fe3e6357df2319d518e4d3e61f56
                     customerUpdateService.createRequest(dto, username);
                     success++;
                 } catch (Exception e) {

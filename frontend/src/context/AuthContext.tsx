@@ -6,7 +6,10 @@ interface AuthContextType {
   user: AuthResponse | null;
   isAuthenticated: boolean;
   login: (username: string, password: string) => Promise<void>;
+<<<<<<< HEAD
   signup: (data: any) => Promise<void>;
+=======
+>>>>>>> f2da93b09fa8fe3e6357df2319d518e4d3e61f56
   logout: () => void;
   hasRole: (roles: UserRole[]) => boolean;
 }
@@ -33,6 +36,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setUser(data);
   }, []);
 
+<<<<<<< HEAD
   const signup = useCallback(async (signupData: any) => {
     const response = await authAPI.signup(signupData);
     const data: AuthResponse = response.data;
@@ -42,6 +46,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setUser(data);
   }, []);
 
+=======
+>>>>>>> f2da93b09fa8fe3e6357df2319d518e4d3e61f56
   const logout = useCallback(() => {
     localStorage.clear();
     setUser(null);
@@ -56,7 +62,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   );
 
   return (
+<<<<<<< HEAD
     <AuthContext.Provider value={{ user, isAuthenticated: !!user, login, signup, logout, hasRole }}>
+=======
+    <AuthContext.Provider value={{ user, isAuthenticated: !!user, login, logout, hasRole }}>
+>>>>>>> f2da93b09fa8fe3e6357df2319d518e4d3e61f56
       {children}
     </AuthContext.Provider>
   );

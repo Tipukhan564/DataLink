@@ -43,7 +43,11 @@ public class SecurityConfig {
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/auth/**", "/h2-console/**", "/swagger-ui/**",
+<<<<<<< HEAD
                         "/v3/api-docs/**", "/actuator/**", "/auth/signup").permitAll()
+=======
+                        "/v3/api-docs/**", "/actuator/**").permitAll()
+>>>>>>> f2da93b09fa8fe3e6357df2319d518e4d3e61f56
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .requestMatchers("/approvals/**").hasAnyRole("SUPERVISOR", "ENGINEER", "ADMIN")
                 .requestMatchers("/bulk-upload/**").hasAnyRole("ENGINEER", "ADMIN")

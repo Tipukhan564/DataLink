@@ -1,6 +1,9 @@
 package com.cdup.service;
 
+<<<<<<< HEAD
 import com.cdup.enums.RequestStatus;
+=======
+>>>>>>> f2da93b09fa8fe3e6357df2319d518e4d3e61f56
 import com.cdup.repository.CustomerUpdateRequestRepository;
 import com.cdup.repository.UserRepository;
 import org.springframework.stereotype.Service;

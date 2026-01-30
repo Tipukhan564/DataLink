@@ -1,6 +1,9 @@
 package com.cdup.controller;
 
+<<<<<<< HEAD
 import com.cdup.dto.CustomerUpdateDTO;
+=======
+>>>>>>> f2da93b09fa8fe3e6357df2319d518e4d3e61f56
 import com.cdup.dto.CustomerUpdateRequestDTO;
 import com.cdup.dto.DashboardStatsDTO;
 import com.cdup.enums.RequestStatus;
@@ -18,7 +21,10 @@ import java.time.format.DateTimeFormatter;
 
 @RestController
 @RequestMapping("/requests")
+<<<<<<< HEAD
 @CrossOrigin(origins = "*", maxAge = 3600)
+=======
+>>>>>>> f2da93b09fa8fe3e6357df2319d518e4d3e61f56
 public class CustomerUpdateController {
 
     private final CustomerUpdateService updateService;
@@ -27,12 +33,18 @@ public class CustomerUpdateController {
         this.updateService = updateService;
     }
 
+<<<<<<< HEAD
     /**
      * Create a new customer update request (accepts JSON, no file uploads)
      */
     @PostMapping
     public ResponseEntity<CustomerUpdateRequestDTO> createRequest(
             @Valid @RequestBody CustomerUpdateDTO dto,
+=======
+    @PostMapping
+    public ResponseEntity<CustomerUpdateRequestDTO> createRequest(
+            @Valid @RequestBody CustomerUpdateRequestDTO dto,
+>>>>>>> f2da93b09fa8fe3e6357df2319d518e4d3e61f56
             Authentication authentication) {
         return ResponseEntity.ok(updateService.createRequest(dto, authentication.getName()));
     }
@@ -100,6 +112,7 @@ public class CustomerUpdateController {
             @PathVariable Long id, Authentication authentication) {
         return ResponseEntity.ok(updateService.processRequest(id, authentication.getName()));
     }
+<<<<<<< HEAD
     
     /**
      * Approve a request
@@ -123,3 +136,6 @@ public class CustomerUpdateController {
         return ResponseEntity.ok(updateService.rejectRequest(id, authentication.getName(), comments));
     }
 }
+=======
+}
+>>>>>>> f2da93b09fa8fe3e6357df2319d518e4d3e61f56

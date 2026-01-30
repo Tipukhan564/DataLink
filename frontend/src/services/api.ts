@@ -51,6 +51,7 @@ export const authAPI = {
     api.post('/auth/login', { username, password }),
   refresh: (refreshToken: string) =>
     api.post('/auth/refresh', { refreshToken }),
+<<<<<<< HEAD
   signup: (data: any) =>
     api.post('/auth/signup', data),
 };
@@ -75,6 +76,22 @@ export const requestsAPI = {
   
   getDashboardStats: () => api.get('/requests/dashboard-stats'),
   
+=======
+};
+
+// Customer Update Requests
+export const requestsAPI = {
+  create: (data: any) => api.post('/requests', data),
+  getAll: (page = 0, size = 20, sortBy = 'createdAt', sortDir = 'desc') =>
+    api.get(`/requests?page=${page}&size=${size}&sortBy=${sortBy}&sortDir=${sortDir}`),
+  getMy: (page = 0, size = 20) =>
+    api.get(`/requests/my?page=${page}&size=${size}`),
+  getById: (id: number) => api.get(`/requests/${id}`),
+  getByStatus: (status: string, page = 0, size = 20) =>
+    api.get(`/requests/status/${status}?page=${page}&size=${size}`),
+  search: (params: any) => api.get('/requests/search', { params }),
+  getDashboardStats: () => api.get('/requests/dashboard-stats'),
+>>>>>>> f2da93b09fa8fe3e6357df2319d518e4d3e61f56
   process: (id: number) => api.post(`/requests/${id}/process`),
 };
 
@@ -124,4 +141,8 @@ export const reportsAPI = {
   daily: () => api.get('/reports/daily'),
   weekly: () => api.get('/reports/weekly'),
   monthly: () => api.get('/reports/monthly'),
+<<<<<<< HEAD
 };
+=======
+};
+>>>>>>> f2da93b09fa8fe3e6357df2319d518e4d3e61f56

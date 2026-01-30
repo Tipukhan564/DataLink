@@ -14,6 +14,10 @@ import {
   User,
   HelpCircle,
   LogOut,
+<<<<<<< HEAD
+=======
+  Database,
+>>>>>>> f2da93b09fa8fe3e6357df2319d518e4d3e61f56
   ChevronRight,
 } from 'lucide-react';
 
@@ -170,11 +174,17 @@ const Sidebar: React.FC = () => {
     <aside className="fixed left-0 top-0 h-screen w-64 bg-white border-r border-gray-200 flex flex-col z-30">
       {/* Brand */}
       <div className="h-16 flex items-center gap-3 px-5 border-b border-gray-200">
+<<<<<<< HEAD
         <img
           src="/zindag.png"
           alt="Zindagi Logo"
           className="w-10 h-10 object-contain"
         />
+=======
+        <div className="w-10 h-10 bg-gradient-to-br from-primary-600 to-primary-700 rounded-xl flex items-center justify-center shadow-lg shadow-primary-500/20">
+          <Database className="w-5 h-5 text-white" />
+        </div>
+>>>>>>> f2da93b09fa8fe3e6357df2319d518e4d3e61f56
         <div>
           <h1 className="text-lg font-bold text-gray-900 tracking-tight">CDUP</h1>
           <p className="text-[10px] text-gray-500 -mt-0.5">Customer Data Update Portal</p>

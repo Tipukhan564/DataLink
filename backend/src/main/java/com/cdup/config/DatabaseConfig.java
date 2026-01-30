@@ -17,12 +17,20 @@ import javax.sql.DataSource;
 /**
  * Database Configuration for CDUP application.
  * Configured for MySQL database with HikariCP connection pooling.
+<<<<<<< HEAD
  * Supports both MySQL (production) and H2 (development) databases.
  */
 @Configuration
 @EnableJpaRepositories(basePackages = "com.cdup.repository")
 @EnableTransactionManagement
 @EnableJpaAuditing
+=======
+ */
+@Configuration
+@EnableJpaAuditing
+@EnableJpaRepositories(basePackages = "com.cdup.repository")
+@EnableTransactionManagement
+>>>>>>> f2da93b09fa8fe3e6357df2319d518e4d3e61f56
 public class DatabaseConfig {
 
     private static final Logger log = LoggerFactory.getLogger(DatabaseConfig.class);

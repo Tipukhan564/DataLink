@@ -1,6 +1,9 @@
 package com.cdup.service;
 
+<<<<<<< HEAD
 import com.cdup.dto.CustomerUpdateDTO;
+=======
+>>>>>>> f2da93b09fa8fe3e6357df2319d518e4d3e61f56
 import com.cdup.dto.CustomerUpdateRequestDTO;
 import com.cdup.dto.DashboardStatsDTO;
 import com.cdup.entity.CustomerUpdateRequest;
@@ -14,7 +17,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+<<<<<<< HEAD
 import org.springframework.jdbc.core.JdbcTemplate;
+=======
+>>>>>>> f2da93b09fa8fe3e6357df2319d518e4d3e61f56
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -34,11 +40,15 @@ public class CustomerUpdateService {
     private final CustomerUpdateRequestRepository requestRepository;
     private final UserRepository userRepository;
     private final AuditService auditService;
+<<<<<<< HEAD
     private final JdbcTemplate jdbcTemplate;
+=======
+>>>>>>> f2da93b09fa8fe3e6357df2319d518e4d3e61f56
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     public CustomerUpdateService(CustomerUpdateRequestRepository requestRepository,
                                   UserRepository userRepository, AuditService auditService,
+<<<<<<< HEAD
                                   JdbcTemplate jdbcTemplate) {
         this.requestRepository = requestRepository;
         this.userRepository = userRepository;
@@ -168,6 +178,15 @@ public class CustomerUpdateService {
     /**
      * Alternative create method for backward compatibility with CustomerUpdateRequestDTO
      */
+=======
+                                  NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+        this.requestRepository = requestRepository;
+        this.userRepository = userRepository;
+        this.auditService = auditService;
+        this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
+    }
+
+>>>>>>> f2da93b09fa8fe3e6357df2319d518e4d3e61f56
     @Transactional
     public CustomerUpdateRequestDTO createRequest(CustomerUpdateRequestDTO dto, String username) {
         User user = userRepository.findByUsername(username)
@@ -279,7 +298,11 @@ public class CustomerUpdateService {
         requestRepository.save(request);
 
         try {
+<<<<<<< HEAD
             // Execute PROC_BLINK_MYTM stored procedure
+=======
+            // Simulate PROC_BLINK_MYTM execution
+>>>>>>> f2da93b09fa8fe3e6357df2319d518e4d3e61f56
             String result = executeProcBlinkMytm(request);
             request.setStatus(RequestStatus.COMPLETED);
             request.setProcessedAt(LocalDateTime.now());
@@ -397,9 +420,12 @@ public class CustomerUpdateService {
         return result;
     }
 
+<<<<<<< HEAD
     /**
      * Map Entity to DTO for responses
      */
+=======
+>>>>>>> f2da93b09fa8fe3e6357df2319d518e4d3e61f56
     private CustomerUpdateRequestDTO mapToDTO(CustomerUpdateRequest entity) {
         CustomerUpdateRequestDTO dto = new CustomerUpdateRequestDTO();
         dto.setId(entity.getId());
@@ -427,9 +453,12 @@ public class CustomerUpdateService {
         return dto;
     }
 
+<<<<<<< HEAD
     /**
      * Map CustomerUpdateRequestDTO to Entity (for backward compatibility)
      */
+=======
+>>>>>>> f2da93b09fa8fe3e6357df2319d518e4d3e61f56
     private CustomerUpdateRequest mapToEntity(CustomerUpdateRequestDTO dto) {
         CustomerUpdateRequest entity = new CustomerUpdateRequest();
         entity.setComplaintNumber(dto.getComplaintNumber());
@@ -447,4 +476,8 @@ public class CustomerUpdateService {
         entity.setSelfieCnicVerified(dto.isSelfieCnicVerified());
         return entity;
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> f2da93b09fa8fe3e6357df2319d518e4d3e61f56

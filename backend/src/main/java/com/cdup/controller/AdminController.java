@@ -27,6 +27,19 @@ public class AdminController {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
+<<<<<<< HEAD
+=======
+    @GetMapping("/users/pending")
+    public ResponseEntity<List<UserDTO>> getPendingUsers() {
+        return ResponseEntity.ok(userService.getPendingUsers());
+    }
+
+    @GetMapping("/users/active")
+    public ResponseEntity<List<UserDTO>> getActiveUsers() {
+        return ResponseEntity.ok(userService.getActiveUsers());
+    }
+
+>>>>>>> f2da93b09fa8fe3e6357df2319d518e4d3e61f56
     @GetMapping("/users/{id}")
     public ResponseEntity<UserDTO> getUser(@PathVariable Long id) {
         return ResponseEntity.ok(userService.getUserById(id));
